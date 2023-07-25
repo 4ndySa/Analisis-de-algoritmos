@@ -1,0 +1,76 @@
+class Nodo:
+    def __init__(self, nombre, x, y):
+        self.nombre = nombre
+        self.x = min(1000, max(0, x))  
+        self.y = min(800, max(0, y))   
+        self.conexiones = []
+
+    def distancia_a(self, otro_nodo):
+        dx = self.x - otro_nodo.x
+        dy = self.y - otro_nodo.y
+        return ((dx ** 2) + (dy ** 2)) ** 0.5
+
+def crear_nodo():
+    nombre = input("Ingrese el nombre del nodo: ")
+    x = int(input("Ingrese la coordenada x del nodo (0 - 1000): "))
+    y = int(input("Ingrese la coordenada y del nodo (0 - 800): "))
+    return Nodo(nombre, x, y)
+
+def conectar_nodos(nodo1, nodo2):
+    nodo1.conexiones.append(nodo2)
+    nodo2.conexiones.append(nodo1)
+
+def mostrar_nodos(nodos):
+    for i, nodo in enumerate(nodos):
+        print(f"{i}. Nombre: {nodo.nombre}, Coordenadas: ({nodo.x}, {nodo.y})")
+
+def mostrar_conexiones(nodo):
+    print(f"Conexiones de {nodo.nombre}:")
+    for conexion in nodo.conexiones:
+        print(conexion.nombre)
+
+def calcular_distancia_total(nodos):
+    distancia_total = 0
+    for i in range(len(nodos) - 1):
+        distancia_total += nodos[i].distancia_a(nodos[i+1])
+    return distancia_total
+
+def main():
+    nodos = []
+
+    while True:
+        print("\n1. Crear nodo")
+        print("2. Conectar nodos")
+        print("3. Mostrar nodos")
+        print("4. Mostrar conexiones de un nodo")
+        print("5. Calcular distancia total recorrida")
+        print("6. Salir")
+
+        opcion = int(input("Ingrese la opción deseada: "))
+
+        if opcion == 1:
+            nodos.append(crear_nodo())
+        elif opcion == 2:
+            print("Nodos disponibles:")
+            mostrar_nodos(nodos)
+            nodo1_idx = int(input("Ingrese el índice del primer nodo: "))
+            nodo2_idx = int(input("Ingrese el índice del segundo nodo: "))
+            conectar_nodos(nodos[nodo1_idx], nodos[nodo2_idx])
+            print("Nodos conectados exitosamente.")
+        elif opcion == 3:
+            mostrar_nodos(nodos)
+        elif opcion == 4:
+            print("Nodos disponibles:")
+            mostrar_nodos(nodos)
+            nodo_idx = int(input("Ingrese el índice del nodo para mostrar sus conexiones: "))
+            mostrar_conexiones(nodos[nodo_idx])
+        elif opcion == 5:
+            distancia_total = calcular_distancia_total(nodos)
+            print(f"Distancia total recorrida: {distancia_total:.2f} unidades.")
+        elif opcion == 6:
+            break
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
+if __name__ == "__main__":
+    main()
